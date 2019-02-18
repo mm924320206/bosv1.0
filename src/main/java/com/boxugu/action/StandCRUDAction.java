@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import com.boxugu.common.BaseAction;
 import com.boxugu.domain.base.Standard;
 import com.boxugu.service.StandardService;
+import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.ModelDriven;
 
@@ -61,7 +62,8 @@ public class StandCRUDAction extends BaseAction<Standard>{
 	@Action(value = "standard_findAll", results = {
 			@Result(name = "success",  type = "json"), })
 	public String standardFindAll() {
-		
+		List<Standard> standards=standardService.findAll();
+		ActionContext.getContext().getValueStack().push(standards);
 		return "success";
 		
 	}

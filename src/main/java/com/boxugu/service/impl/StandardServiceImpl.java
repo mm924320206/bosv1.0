@@ -1,5 +1,7 @@
 package com.boxugu.service.impl;
 
+import java.util.List;
+
 import org.omg.CORBA.PRIVATE_MEMBER;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -29,6 +31,11 @@ public class StandardServiceImpl implements StandardService {
 	public Page<Standard> findPageData(Pageable pageable) {
 		// TODO Auto-generated method stub
 		return standardRepository.findAll(pageable);
+	}
+	@Override
+	public List<Standard> findAll() {
+		// TODO Auto-generated method stub
+		return standardRepository.findAll();
 	}
 
 }

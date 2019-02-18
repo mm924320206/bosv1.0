@@ -41,16 +41,17 @@
 				
 				var t1=0;
 				var t2=0;
-				if($('input[name="maxWeight"]').val()<$('input[name="minWeight"]'||'input[name="minWeight"]').val()>$('input[name="maxWeight"]').val())
+				if(($('input[name="minWeight"]').val())>($('input[name="maxWeight"]').val()))
 				{$.messager.alert("警告","最大重量不可小于最小重量","warning");
-				t1+=1;}
-				if($('input[name="maxLength"]').val()<$('input[name="minLength"]').val())
+				t1=1;}
+				if(($('input[name="maxLength"]').val())<($('input[name="minLength"]').val()))
 				{$.messager.alert("警告","最大长度不可小于最小长度","warning");
-				t2+=1;}
-				if($("#standForm").form('validate')&&t1==0&&t2==0)
+				t2=1;}
+				if(($("#standForm").form('validate'))&&t1==0&&t2==0)
 					{$("#standForm").submit();}
 					else
-						{$.messager.alert("警告","表单存在非法内容","warning");}
+						{$.messager.alert("警告","表单存在非法内容","warning");
+						}
 			});
 				
 			});	
