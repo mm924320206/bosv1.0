@@ -30,29 +30,29 @@
 					pageList: [30,50,100],
 					pagination : true,
 					toolbar : toolbar,
-					url : "../../data/standard.json",
+					url : "../../stand_pageQuery.action",
 					idField : 'id',
 					columns : columns
 				});
 				
 					//提交新增表格
-			$("#save").click(function(){
-				if($('input[name="maxWeight"]').val()<$('input[name="minWeight"]').val())
-				{$.messager.alert("警告","最大重量不可小于最小重量","warning");}
-				else 
-				{
-					if($('input[name="maxLength"]').val()<$('input[name="minLength"]').val())
-				{$.messager.alert("警告","最大长度不可小于最小长度","warning");}
-				else{
-					if($("#standForm").form('validate'))
-					{$("#standForm").submit()}
-					else{
-						$.messager.alert("警告","表单存在非法内容","warning");
-					}
-				}
-				}
+			$("#save").click(function()
+			{
 				
-			})
+				var t1=0;
+				var t2=0;
+				if($('input[name="maxWeight"]').val()<$('input[name="minWeight"]'||'input[name="minWeight"]').val()>$('input[name="maxWeight"]').val())
+				{$.messager.alert("警告","最大重量不可小于最小重量","warning");
+				t1+=1;}
+				if($('input[name="maxLength"]').val()<$('input[name="minLength"]').val())
+				{$.messager.alert("警告","最大长度不可小于最小长度","warning");
+				t2+=1;}
+				if($("#standForm").form('validate')&&t1==0&&t2==0)
+					{$("#standForm").submit();}
+					else
+						{$.messager.alert("警告","表单存在非法内容","warning");}
+			});
+				
 			});	
 			
 			//工具栏
@@ -68,7 +68,13 @@
 				text : '修改',
 				iconCls : 'icon-edit',
 				handler : function(){
-					alert('修改');
+					var rows=$("#grid").datagrid('getSelections');
+					if (rows.length!=1) {
+						$.messager.alert("警告","请选择一行数据！！","warning")
+					} else{
+						$("#standForm").form('load',rows[0]);
+						$("#standardWindow").window('open');
+					}
 				}
 			},{
 				id : 'button-delete',
@@ -169,7 +175,7 @@
 							<td>最小重量</td>
 							<td>
 								<input type="text" name="minWeight" 
-										class="easyui-numberbox" data-options="min:0,max:20" required="true" />
+										class="easyui-numberbox" data-options="min:0,max:30" required="true" />
 							</td>
 						</tr>
 						<tr>
