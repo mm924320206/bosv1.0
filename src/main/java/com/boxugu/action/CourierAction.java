@@ -11,6 +11,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.struts2.ServletActionContext;
 import org.apache.struts2.convention.annotation.Action;
 import org.apache.struts2.convention.annotation.Namespace;
 import org.apache.struts2.convention.annotation.ParentPackage;
@@ -26,6 +27,7 @@ import org.springframework.stereotype.Controller;
 import com.boxugu.common.BaseAction;
 import com.boxugu.domain.base.Courier;
 import com.boxugu.service.CourierService;
+import com.opensymphony.xwork2.ActionContext;
 
 @Controller
 @Scope("prototype")
@@ -42,7 +44,7 @@ public class CourierAction extends BaseAction<Courier>{
 	private CourierService courierService;
 	
 	@Action(value = "courier_save", results = {
-			@Result(name = "success", location = "/pages/base/standard.html", type = "redirect"), })
+			@Result(name = "success", location = "/pages/base/courier.html", type = "redirect")})
 	public String save() 
 	{
 		courierService.save(model);
@@ -51,7 +53,7 @@ public class CourierAction extends BaseAction<Courier>{
 
 	//courier的分页
 		@Action(value = "courier_pageQuery", results = {
-				@Result(name = "success",  type = "json"), })
+				@Result(name = "success",  type = "json")})
 		public String pageQuery() {
 			
 			Pageable pageable=new PageRequest(page-1, rows);
@@ -90,7 +92,16 @@ public class CourierAction extends BaseAction<Courier>{
 			Page<Courier> pageData=courierService.findPageData(specification,pageable);
 			pushPageDataToValueStack(pageData);
 			return "success";
-			
 		}
 	
+		
+		@Action(value = "courier_delBatch", results = {
+				@Result(name = "success", location = "/pages/base/courier.html", type = "redirect") })
+		public String delBatch() 
+		{
+			String[] idArray=ServletActionContext.getRequest().getParameter("ids").split(",");
+			courierService.delBatch(idArray);
+			return "success";
+			}
+
 }

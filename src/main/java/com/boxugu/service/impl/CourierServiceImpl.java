@@ -21,13 +21,22 @@ public class CourierServiceImpl implements CourierService {
 	@Override
 	public void save(Courier model) {
 		// TODO Auto-generated method stub
-		courierRepository.save(model);
+		courierRepository.saveAndFlush(model);
 	}
 
 	@Override
 	public Page<Courier> findPageData(Specification<Courier> specification, Pageable pageable) {
 		// TODO Auto-generated method stub
 		return courierRepository.findAll(specification,pageable);
+	}
+
+	@Override
+	public void delBatch(String[] idArray) {
+		for (String idsr : idArray) {
+			Integer idInteger=Integer.parseInt(idsr);
+			courierRepository.updateDelTag(idInteger);
+		}
+		
 	}
 
 }
