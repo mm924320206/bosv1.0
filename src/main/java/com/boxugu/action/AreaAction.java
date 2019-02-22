@@ -33,10 +33,10 @@ import com.boxugu.domain.base.Area;
 import com.boxugu.service.AreaService;
 import com.boxugu.utils.PinYin4jUtils;
 
-/*@Controller
+@Controller
 @Scope("prototype")
 @Namespace("/")
-@ParentPackage("json-default")*/
+@ParentPackage("json-default")
 public class AreaAction extends BaseAction<Area>{
 
 	/**
