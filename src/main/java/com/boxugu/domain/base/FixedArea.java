@@ -4,16 +4,21 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import org.apache.struts2.json.annotations.JSON;
+import org.hibernate.annotations.Cascade;
 
 /**
  * @description:定区
@@ -27,13 +32,14 @@ public class FixedArea {
 	private String id; // 主键
 	@Column(name = "C_FIXED_AREA_NAME", unique = true)
 	private String fixedAreaName; // 定区名称
-	@Column(name = "C_FIXED_AREA_LEADER", unique = true)
-	private String fixedAreaLeader;// 定区负责人
-	@Column(name = "C_TELEPHONE")
-	private String telephone;// 联系电话
-	@Column(name = "C_COMPANY")
-	private String company; // 所属单位
-
+	/* 分离定区负责人，独立成类
+	 * @Column(name = "C_FIXED_AREA_LEADER", unique = true) private String
+	 * fixedAreaLeader;// 定区负责人
+	 * 
+	 * @Column(name = "C_TELEPHONE") private String telephone;// 联系电话
+	 * 
+	 * @Column(name = "C_COMPANY") private String company; // 所属单位
+	 */
 	@Column(name = "C_OPERATING_TIME")
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date operatingTime;// 操作时间
@@ -48,6 +54,11 @@ public class FixedArea {
 	@ManyToMany
 	@JoinTable(name = "T_FIXEDAREA_COURIER", joinColumns = { @JoinColumn(name = "C_FIXED_AREA_ID", referencedColumnName = "C_ID") }, inverseJoinColumns = { @JoinColumn(name = "C_COURIER_ID", referencedColumnName = "C_ID") })
 	private Set<Courier> couriers = new HashSet<Courier>(0);
+	
+	@ManyToOne  //一个定区一个片警
+	@Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE,org.hibernate.annotations.CascadeType.PERSIST})
+	@JoinColumn(name = "C_FIXEDAREALEADER_ID")
+	private FixAreaLeader fixedAreaLeader; // 负责人
 
 	public String getId() {
 		return id;
@@ -65,22 +76,7 @@ public class FixedArea {
 		this.fixedAreaName = fixedAreaName;
 	}
 
-	public String getFixedAreaLeader() {
-		return fixedAreaLeader;
-	}
-
-	public void setFixedAreaLeader(String fixedAreaLeader) {
-		this.fixedAreaLeader = fixedAreaLeader;
-	}
-
-	public String getTelephone() {
-		return telephone;
-	}
-
-	public void setTelephone(String telephone) {
-		this.telephone = telephone;
-	}
-
+	@JSON(serialize=false)
 	public Date getOperatingTime() {
 		return operatingTime;
 	}
@@ -89,6 +85,7 @@ public class FixedArea {
 		this.operatingTime = operatingTime;
 	}
 
+	@JSON(serialize=false)
 	public String getOperator() {
 		return operator;
 	}
@@ -97,22 +94,7 @@ public class FixedArea {
 		this.operator = operator;
 	}
 
-	public Set<SubArea> getSubareas() {
-		return subareas;
-	}
-
-	public void setSubareas(Set<SubArea> subareas) {
-		this.subareas = subareas;
-	}
-
-	public Set<Courier> getCouriers() {
-		return couriers;
-	}
-
-	public void setCouriers(Set<Courier> couriers) {
-		this.couriers = couriers;
-	}
-
+	@JSON(serialize=false)
 	public String getOperatingCompany() {
 		return operatingCompany;
 	}
@@ -121,12 +103,32 @@ public class FixedArea {
 		this.operatingCompany = operatingCompany;
 	}
 
-	public String getCompany() {
-		return company;
+	@JSON(serialize=false)
+	public Set<SubArea> getSubareas() {
+		return subareas;
 	}
 
-	public void setCompany(String company) {
-		this.company = company;
+	public void setSubareas(Set<SubArea> subareas) {
+		this.subareas = subareas;
 	}
+
+	@JSON(serialize=false)
+	public Set<Courier> getCouriers() {
+		return couriers;
+	}
+
+	public void setCouriers(Set<Courier> couriers) {
+		this.couriers = couriers;
+	}
+
+	public FixAreaLeader getFixedAreaLeader() {
+		return fixedAreaLeader;
+	}
+
+	public void setFixedAreaLeader(FixAreaLeader fixedAreaLeader) {
+		this.fixedAreaLeader = fixedAreaLeader;
+	}
+
+	
 
 }

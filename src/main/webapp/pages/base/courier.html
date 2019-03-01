@@ -16,23 +16,23 @@
 		<script type="text/javascript" src="../../js/easyui/ext/jquery.cookie.js"></script>
 		<script src="../../js/easyui/locale/easyui-lang-zh_CN.js" type="text/javascript"></script>
 		<script type="text/javascript">
-			$.fn.serializeJson=function(){
-				var serializeObj={};
-				var array=this.serializeArray();
-				var str=this.serialize();
-				$(array).each(function(){
-					if (serializeObj[this.name]) {
-						if ($.isArray(serializeObj[this.name])) {
-							serializeObj[this.name].push(this.value)
-						} else{
-							serializeObj[this.name]=[serializeObj[this.name],this.value];
-						}
-					} else{
-						serializeObj[this.name]=this.value;
-					}
-				});
-				return serializeObj;
-			};
+				$.fn.serializeJson=function(){  
+            var serializeObj={};  
+            var array=this.serializeArray();  
+            var str=this.serialize();  
+            $(array).each(function(){  
+                if(serializeObj[this.name]){  
+                    if($.isArray(serializeObj[this.name])){  
+                        serializeObj[this.name].push(this.value);  
+                    }else{  
+                        serializeObj[this.name]=[serializeObj[this.name],this.value];  
+                    }  
+                }else{  
+                    serializeObj[this.name]=this.value;   
+                }  
+            });  
+            return JSON.stringify(serializeObj);  
+        }; 
 			
 			
 			function doAdd(){
@@ -218,8 +218,8 @@
 			    });
 			    //查询按钮事件
 			    $("#searchBtn").click(function(){
-			    	var params=$("#searchForm").serializeJson();
-			    	$("#gird").datagrid('load',params);
+			    	var params=$("#searchForm").serializeJson;
+			    	$("#grid").datagrid('load',params);
 			    	$("#searchWindow").window('close');
 			    });
 				

@@ -16,25 +16,42 @@
 		<script src="../../js/easyui/locale/easyui-lang-zh_CN.js" type="text/javascript"></script>
 		<script type="text/javascript" src="../../js/ocupload/jquery.ocupload-1.1.2.js"></script>
 		<script type="text/javascript">
-			$.fn.serializeJson=function(){
-				var serializeObj={};
-				var array=this.serializeArray();
-				var str=this.serialize();
-				$(array).each(function(){
-					if (serializeObj[this.name]) {
-						if ($.isArray(serializeObj[this.name])) {
-							serializeObj[this.name].push(this.value)
-						} else{
-							serializeObj[this.name]=[serializeObj[this.name],this.value];
-						}
-					} else{
-						serializeObj[this.name]=this.value;
-					}
-				});
-				return serializeObj;
-			};
+				$.fn.serializeJson=function(){  
+            		var serializeObj={};  
+           			 var array=this.serializeArray();  
+            		var str=this.serialize();  
+           			 $(array).each(function(){  
+                		if(serializeObj[this.name]){  
+                    		if($.isArray(serializeObj[this.name])){  
+                        		serializeObj[this.name].push(this.value);  
+                   				 }else{  
+                       				 serializeObj[this.name]=[serializeObj[this.name],this.value];  
+                   		 			}  
+                			}else{  
+                    				serializeObj[this.name]=this.value;   
+                				}  
+            		});  
+            return serializeObj;  
+        }; 
 			
-			
+/*			网上同类form转json参考，发现老师给的回去的也是个json对象，不过配合datagrid就是这么写的。。。
+ * $.fn.serializeObject = function()
+{    
+   var o = {};    
+   var a = this.serializeArray();    
+   $.each(a, function() {    
+       if (o[this.name]) {    
+           if (!o[this.name].push) {    
+               o[this.name] = [o[this.name]];    
+           }    
+           o[this.name].push(this.value || '');    
+       } else {    
+           o[this.name] = this.value || '';    
+       }    
+   });    
+   return o;    
+};  */
+
 			function doAdd(){
 				$('#addWindow').window("open");
 			}
@@ -167,13 +184,16 @@
 				//查询窗口查询按钮
 				$("#searchBtn").click(function(){
 			    	var params=$("#searchForm").serializeJson();
-			    	$("#gird").datagrid('load',params);
+			    	//var paramsjson=JSON.stringify(params);
+			    	alert(params);
+			    	$("#grid").datagrid('load',params);
 			    	$("#searchWindow").window('close');
 			    });
 			});
 		
 			function doDblClickRow(){
 				alert("双击表格数据...");
+				
 			}
 		</script>
 	</head>
