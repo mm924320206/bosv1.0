@@ -1,5 +1,13 @@
 package com.boxugu.service.impl;
 
+import java.util.Collection;
+import java.util.List;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
@@ -37,6 +45,12 @@ public class CourierServiceImpl implements CourierService {
 			courierRepository.updateDelTag(idInteger);
 		}
 		
+	}
+
+	@Override
+	public List<Courier> findNoAssociation(Specification<Courier> specification) {
+		// TODO Auto-generated method stub
+		return courierRepository.findAll(specification);
 	}
 
 }

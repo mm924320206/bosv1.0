@@ -169,4 +169,11 @@ public class Courier {
 	public void setStandard(Standard standard) {
 		this.standard = standard;
 	}
+	
+	@javax.persistence.Transient
+	public String getInfo()
+	{
+		return name+"("+company+")";
+	}
+
 }

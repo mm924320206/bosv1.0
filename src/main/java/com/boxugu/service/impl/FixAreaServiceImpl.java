@@ -10,10 +10,14 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.boxugu.dao.CourierRepository;
 import com.boxugu.dao.FixAreaRepository;
 import com.boxugu.dao.LeaderRepository;
+import com.boxugu.dao.TakeTimeRepository;
+import com.boxugu.domain.base.Courier;
 import com.boxugu.domain.base.FixAreaLeader;
 import com.boxugu.domain.base.FixedArea;
+import com.boxugu.domain.base.TakeTime;
 import com.boxugu.service.FixAreaService;
 
 @Service("FixAreaService")
@@ -27,6 +31,16 @@ public class FixAreaServiceImpl implements FixAreaService {
 	@Autowired
 	@Qualifier("leaderRepository")
 	private LeaderRepository leaderRepository;
+	
+	@Autowired
+	@Qualifier("takeTimeRepository")
+	private TakeTimeRepository takeTimeRepository;
+	
+	@Autowired
+	@Qualifier("courierRepository")
+	private CourierRepository courierRepository;
+	
+	
 	@Override
 	public void save(FixedArea model) {
 		fixAreaRepository.saveAndFlush(model);
@@ -35,6 +49,16 @@ public class FixAreaServiceImpl implements FixAreaService {
 	public Page<FixedArea> findPageData(Specification<FixedArea> specification, Pageable pageable) {
 		// TODO Auto-generated method stub
 		return fixAreaRepository.findAll(specification, pageable);
+	}
+	@Override
+	public void associationCourierToFixedArea(FixedArea model, Integer courierId, Integer takeTimeId) {
+		// TODO Auto-generated method stub
+		FixedArea fixedArea=fixAreaRepository.findOne(model.getId());
+		Courier courier=courierRepository.findOne(courierId);
+		TakeTime takeTime=takeTimeRepository.findOne(takeTimeId);
+		fixedArea.getCouriers().add(courier);
+		courier.setTakeTime(takeTime);
+		
 	}
 
 	

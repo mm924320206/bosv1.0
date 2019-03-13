@@ -1,7 +1,9 @@
 package com.boxugu.action;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -26,6 +28,7 @@ import org.springframework.stereotype.Controller;
 
 import com.boxugu.common.BaseAction;
 import com.boxugu.domain.base.Courier;
+import com.boxugu.domain.base.FixedArea;
 import com.boxugu.service.CourierService;
 import com.opensymphony.xwork2.ActionContext;
 
@@ -104,4 +107,24 @@ public class CourierAction extends BaseAction<Courier>{
 			return "success";
 			}
 
+		//查询未关联定区的快递员
+		
+		@Action(value = "couriernoassociation", results = {
+				@Result(name = "success", type = "json"), })
+		public String courierNoAssociation() {
+			Specification<Courier> specification=new Specification<Courier>() {
+
+				@Override
+				public Predicate toPredicate(Root<Courier> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+					// TODO Auto-generated method stub
+					Predicate p1=cb.isEmpty(root.get("fixedAreas").as(Set.class));
+					return p1;
+				}
+			};
+			List<Courier> couriers=courierService.findNoAssociation(specification);
+					ActionContext.getContext().getValueStack().push(couriers);
+					return "success";
+		}
+		
+		
 }
